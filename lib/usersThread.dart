@@ -57,8 +57,8 @@ class _usersThread extends State<usersThread> {
                   builder: (context) => DeleteWidget(isDeleted),
                   ).then((valueFromDialog){
                     if (valueFromDialog == true) {
-                      List deleted = [thread.id.toString() + "t", thread.id, thread.coordinates];
-                      Navigator.pop(context, deleted);
+                      thread.isDeleted = true;
+                      Navigator.pop(context, thread);
                     }
                   })
                   },
@@ -67,7 +67,7 @@ class _usersThread extends State<usersThread> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  Navigator.pop(context, isSelected);
+                  Navigator.pop(context, thread);
                 },
               ),
               title: Text(thread.threadName),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:toripolliisi/addThread.dart';
 import 'package:toripolliisi/Place.dart';
 import 'package:toripolliisi/Thread.dart';
+import 'package:toripolliisi/Message.dart';
 import 'package:toripolliisi/usersThread.dart';
 import 'package:toripolliisi/threadScreen.dart';
 import 'package:toripolliisi/placeInfo.dart';
@@ -55,8 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
     listOfPlaces.add(Place("Oulu10", "goodToKnow", "oulu10_1.jpg", "Oulu10-palvelut tarjoaa neuvontaa ja ohjausta kaikkiin Oulun kaupungin palveluihin liittyen, kuten esimerkiksi Lipunmyynti Oulun joukkoliikenteeseen. Tarjolla on myös neuvontaa ja ohjausta valtiohallinnon palveluista sekä etäpalveluyhteydet. ", [false, false], [65.013780, 25.470417], 9));
     listOfPlaces.add(Place("PSOAS", "goodToKnow", "psoas1.jpg", "PSOAS tarjoaa asumispalveluja opiskelijoille. PSOASin valikoimassa on useita eri kokoisia moderneja ja viihtyisiä opiskelija-asuntoja. ", [false, false], [65.017182, 25.478804], 77));
 
-    listOfThreads.add(Thread(1, "Ensimmainen lanka", "thread1.json", [false, false], [65.0, 25.4], 325));
-    listOfThreads.add(Thread(2, "Keskustelu 2", "thread2.json", [false, false], [65.0, 25.5], 12));
+    listOfThreads.add(Thread(1, "Ensimmainen lanka", "thread1.db", [false, false], [65.0, 25.4], 325, false, [Message("user500", "Mitä kuuluu?", "22.05.2021", "14:34"), Message("user521", "Ihan hyvää", "22.05.2021", "14:36")]));
+    listOfThreads.add(Thread(2, "Keskustelu 2", "thread2.db", [false, false], [65.0, 25.5], 12, false, [Message("user123", "Oletteko käyneet täällä?", "22.05.2021", "14:32"), Message("user42", "Joo pari kertaa", "22.05.2021", "14:56") , Message("user12", "Pittääpä käyä kattomassa. Mitäs kaikkea täältä oikeen löytyy?", "22.05.2021", "19:33")]));
 
     setUserMarker();
     setThreadMarker();
@@ -144,35 +145,37 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void goToThreadScreen(int i) async {
-    List<bool> voteInformation = await Navigator.push(
+    Thread threadInformation = await Navigator.push(
       context,
       CupertinoPageRoute(
           fullscreenDialog: true, builder: (context) => threadScreen(listOfThreads[i])),
     );
-    print(voteInformation);
+    print("Users vote: " + threadInformation.usersVote.toString());
   }
 
   void goToUsersThreadScreen(int i) async {
-    List voteAndDeleteInformation = await Navigator.push(
+    Thread threadInformation = await Navigator.push(
       context,
       CupertinoPageRoute(
           fullscreenDialog: true, builder: (context) => usersThread(listOfThreads[i])),
     );
-    print(voteAndDeleteInformation);
-    if (voteAndDeleteInformation.length == 3) {
-      Marker marker = _markers.firstWhere((marker) => marker.markerId.value == voteAndDeleteInformation[0],orElse: () => null);
+    print(threadInformation.isDeleted);
+    if (threadInformation.isDeleted == true) {
+      Marker marker = _markers.firstWhere((marker) => marker.markerId.value == threadInformation.id.toString() + "t",orElse: () => null);
       setState(() {
         _markers.remove(marker);
       });
       int count = 0;
       for (var elem in listOfUsedCoordinates) {
-        if (eq(elem, voteAndDeleteInformation[2])) {
-          listOfUsedCoordinates.removeAt(count);
+        if (eq(elem, threadInformation.coordinates)) {
+          break;
         }
         count++;
       }
+      listOfUsedCoordinates.removeAt(count);
       print("Thread deleted");
     }
+    print("Users vote: " + threadInformation.usersVote.toString());
   }
 
   void goToPlaceInfoScreen(int i) async {
@@ -227,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setNewThread(List newThreadInformation) {
 
-    listOfThreads.add(Thread(listOfThreads.length+1, newThreadInformation[0], "thread2.json", [false, false], newThreadInformation[1], 0));
+    listOfThreads.add(Thread(listOfThreads.length+1, newThreadInformation[0], "thread" + (listOfThreads.length+1).toString() + ".db", [false, false], newThreadInformation[1], 0, false, []));
     double x = newThreadInformation[1][0];
     double y = newThreadInformation[1][1];
     setState(() {

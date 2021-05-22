@@ -20,13 +20,17 @@ class _threadScreen extends State<threadScreen> {
   void initState() {
     isSelected = thread.usersVote;
     checkVotes();
-    messages.add(Bubble(margin: BubbleEdges.only(top: 10), alignment: Alignment.topLeft, nip: BubbleNip.leftTop, child: Text('Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? '),),);
-    messages.add(Bubble(margin: BubbleEdges.only(top: 10), alignment: Alignment.topLeft, nip: BubbleNip.leftTop, child: Text('Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? '),),);
-    messages.add(Bubble(margin: BubbleEdges.only(top: 10), alignment: Alignment.topLeft, nip: BubbleNip.leftTop, child: Text('Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? '),),);
-    messages.add(Bubble(margin: BubbleEdges.only(top: 10), alignment: Alignment.topLeft, nip: BubbleNip.leftTop, child: Text('Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? '),),);
-    messages.add(Bubble(margin: BubbleEdges.only(top: 10), alignment: Alignment.topLeft, nip: BubbleNip.leftTop, child: Text('Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? '),),);
-    messages.add(Bubble(margin: BubbleEdges.only(top: 10), alignment: Alignment.topLeft, nip: BubbleNip.leftTop, child: Text('Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? Onko kaikilla hyvä meininki? Mitäs täällä oikeen tapahtuu? '),),);
+    readMessages();
     super.initState();
+  }
+
+  void readMessages() {
+    for (var elem in thread.messages) {
+      messages.add(Bubble(margin: BubbleEdges.only(top: 10),
+        alignment: Alignment.topLeft,
+        nip: BubbleNip.leftTop,
+        child: Text(elem.message),),);
+    }
   }
 
   void addMessage () {
@@ -66,7 +70,7 @@ class _threadScreen extends State<threadScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  Navigator.pop(context, isSelected);
+                  Navigator.pop(context, thread);
                 },
               ),
               title: Text(thread.threadName),
