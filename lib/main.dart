@@ -6,6 +6,7 @@ import 'package:toripolliisi/addThread.dart';
 import 'package:toripolliisi/Place.dart';
 import 'package:toripolliisi/Thread.dart';
 import 'package:toripolliisi/Message.dart';
+import 'package:toripolliisi/User.dart';
 import 'package:toripolliisi/usersThread.dart';
 import 'package:toripolliisi/threadScreen.dart';
 import 'package:toripolliisi/placeInfo.dart';
@@ -40,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List listOfThreads = [];
   List userCoordinates = [65.03, 25.54];
   List listOfUsedCoordinates = [];
+  User user;
 
   Function eq = const ListEquality().equals;
 
@@ -56,8 +58,10 @@ class _MyHomePageState extends State<MyHomePage> {
     listOfPlaces.add(Place("Oulu10", "goodToKnow", "oulu10_1.jpg", "Oulu10-palvelut tarjoaa neuvontaa ja ohjausta kaikkiin Oulun kaupungin palveluihin liittyen, kuten esimerkiksi Lipunmyynti Oulun joukkoliikenteeseen. Tarjolla on myös neuvontaa ja ohjausta valtiohallinnon palveluista sekä etäpalveluyhteydet. ", [false, false], [65.013780, 25.470417], 9));
     listOfPlaces.add(Place("PSOAS", "goodToKnow", "psoas1.jpg", "PSOAS tarjoaa asumispalveluja opiskelijoille. PSOASin valikoimassa on useita eri kokoisia moderneja ja viihtyisiä opiskelija-asuntoja. ", [false, false], [65.017182, 25.478804], 77));
 
-    listOfThreads.add(Thread(1, "Ensimmainen lanka", "thread1.db", [false, false], [65.0, 25.4], 325, false, [Message("user500", "Mitä kuuluu?", "22.05.2021", "14:34"), Message("user521", "Ihan hyvää", "22.05.2021", "14:36")]));
-    listOfThreads.add(Thread(2, "Keskustelu 2", "thread2.db", [false, false], [65.0, 25.5], 12, false, [Message("user123", "Oletteko käyneet täällä?", "22.05.2021", "14:32"), Message("user42", "Joo pari kertaa", "22.05.2021", "14:56") , Message("user12", "Pittääpä käyä kattomassa. Mitäs kaikkea täältä oikeen löytyy?", "22.05.2021", "19:33")]));
+    listOfThreads.add(Thread(1, "Ensimmainen lanka", "thread1.db", [false, false], [65.0, 25.4], 325, false, [Message("user500", "Kannattaa käydä täällä katteleen. Hienoja maisemia", "22.05.2021", "14:34"), Message("user521", "Hyvä homma.", "22.05.2021", "14:36")]));
+    listOfThreads.add(Thread(2, "Keskustelu 2", "thread2.db", [false, false], [65.0, 25.5], 12, false, [Message("user123", "Oletteko käyneet täällä?", "22.05.2021", "14:32"), Message("user12", "Pittääpä käyä kattomassa. Mitäs kaikkea täältä oikeen löytyy?", "22.05.2021", "19:33")]));
+
+    user = User("testUser", "1234", "email@email.com", "Test", "User");
 
     setUserMarker();
     setThreadMarker();
@@ -128,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           position: LatLng(userCoordinates[0], userCoordinates[1]),
           icon: userMarker,
           anchor: const Offset(0.5, 0.5),
+          consumeTapEvents: true,
       ),
     );
   }
@@ -148,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Thread threadInformation = await Navigator.push(
       context,
       CupertinoPageRoute(
-          fullscreenDialog: true, builder: (context) => threadScreen(listOfThreads[i])),
+          fullscreenDialog: true, builder: (context) => threadScreen(listOfThreads[i], user)),
     );
     print("Users vote: " + threadInformation.usersVote.toString());
   }
@@ -157,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Thread threadInformation = await Navigator.push(
       context,
       CupertinoPageRoute(
-          fullscreenDialog: true, builder: (context) => usersThread(listOfThreads[i])),
+          fullscreenDialog: true, builder: (context) => usersThread(listOfThreads[i], user)),
     );
     print(threadInformation.isDeleted);
     if (threadInformation.isDeleted == true) {

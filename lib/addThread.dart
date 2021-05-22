@@ -121,6 +121,7 @@ class _addThread extends State<addThread> {
                   ),
                   ElevatedButton(
                       onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         if (myController.text.isNotEmpty) {
                           threadInfo.add(myController.text);
                           threadInfo.add(coordinates);
