@@ -17,6 +17,7 @@ class _addThread extends State<addThread> {
 
   _addThread(this.coordinates);
 
+  //Sets initial values
   @override
   void initState() {
     setUserMarker();
@@ -24,14 +25,17 @@ class _addThread extends State<addThread> {
     super.initState();
   }
 
+  //Sets user icon
   void setUserMarker() async {
     userMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), "assets/userLocationBigger.png");
   }
 
+  //Sets thread icon
   void setThreadMarker() async {
     threadMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), "assets/thread.png");
   }
 
+  //Empty controller
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -48,6 +52,7 @@ class _addThread extends State<addThread> {
     });
   }
 
+  //Sets user and thread marker to map
   void setMarkersToMap() {
     _markers.add(
       Marker(
@@ -89,7 +94,7 @@ class _addThread extends State<addThread> {
                     builder: (context) => AboutWidget(),
                   ),
                 },
-                    icon: Icon(Icons.search))
+                    icon: Icon(Icons.help_rounded))
               ],
             ),
           ),
@@ -103,7 +108,6 @@ class _addThread extends State<addThread> {
                       child: GoogleMap(
                         onMapCreated: _onMapCreated,
                         markers: _markers,
-                        myLocationEnabled: true,
                         initialCameraPosition: CameraPosition(
                           target: LatLng(coordinates[0], coordinates[1]),
                           zoom: 11,
@@ -114,7 +118,7 @@ class _addThread extends State<addThread> {
                     child: TextField(
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Enter the topic'
+                          hintText: 'Enter the title'
                       ),
                       controller: myController,
                     ),
@@ -134,7 +138,7 @@ class _addThread extends State<addThread> {
                                   Navigator.of(context).pop(true);
                                 });
                                 return AlertDialog(
-                                  content: Text('Add topic for your thread!'),
+                                  content: Text('Add title for your thread!'),
                                 );
                               });
                         }
@@ -166,37 +170,13 @@ class AboutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(' HELP'),
+      title: Text('Thread Info'),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            child: Text("NativeAlloc concurrent copying GC freed 55213(2493KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 8042KB/15MB, paused 355us total 146.650ms "
-                "NativeAlloc concurrent copying GC freed 55213(2493KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 8042KB/15MB, paused 355us total 146.650ms"),
+            child: Text("Thread will be created to your current location. DO NOT create a thread if you don't want to show your current location to everybody.", style: TextStyle(fontSize: 14)),
           ),
-          Container(
-            child: Row (
-              children: [
-                Icon(Icons.location_pin, color: Colors.purple,),
-                Text("Nähtävyys"),
-              ],),),
-          Container(
-            child: Row (
-              children: [
-                Icon(Icons.location_pin, color: Colors.redAccent,),
-                Text("Nähtävyys"),
-              ],),),
-          Container(
-            child: Row (
-              children: [
-                Icon(Icons.location_pin, color: Colors.greenAccent,),
-                Text("Nähtävyys"),
-              ],),),
-          Container(
-            child: Row (
-              children: [
-                Icon(Icons.location_pin, color: Colors.blue.shade400,),
-                Text("Nähtävyys"),
-              ],),),
         ],
       ),
       actions: [

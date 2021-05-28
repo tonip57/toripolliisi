@@ -28,6 +28,7 @@ class _usersThread extends State<usersThread> {
 
   _usersThread(this.thread, this.user);
 
+  //Sets initial values
   @override
   void initState() {
     isSelected = thread.usersVote;
@@ -42,6 +43,7 @@ class _usersThread extends State<usersThread> {
     super.initState();
   }
 
+  //Reads messages from Thread-object. Users own messages are shown differently
   void readMessages() {
     for (var elem in thread.messages) {
       if (elem.user != user.userName) {
@@ -98,6 +100,7 @@ class _usersThread extends State<usersThread> {
     }
   }
 
+  //Gets date for users message
   String getDate() {
     var dateNow = new DateTime.now();
     String day = DateFormat('d').format(dateNow);
@@ -107,13 +110,15 @@ class _usersThread extends State<usersThread> {
     return formattedDate;
   }
 
+  //Gets time for users message
   String getTime() {
     var timeNow = new DateTime.now();
-    timeNow = timeNow.add(new Duration(hours: 3));
+    //timeNow = timeNow.add(new Duration(hours: 3));
     String formattedTime = DateFormat('Hm').format(timeNow);
     return formattedTime;
   }
 
+  //Adds users message to message list view
   void addMessage () {
     String formattedDate = getDate();
     String formattedTime = getTime();
@@ -147,6 +152,7 @@ class _usersThread extends State<usersThread> {
     thread.messages.add(Message(user.userName, myController.text, formattedDate, formattedTime));
   }
 
+  //Checks threads votes and if user has already voted
   void checkVotes() {
     if (eq(isSelected, [false, false])) {
       initialVotes = thread.votes;
@@ -157,6 +163,7 @@ class _usersThread extends State<usersThread> {
     }
   }
 
+  //Scrolls to bottom of the list view when new message is added
   void _scrollToIndex() {
     print(messages.length-1);
     controller.scrollToIndex(messages.length-1);
@@ -205,10 +212,10 @@ class _usersThread extends State<usersThread> {
                     Expanded(
                       flex: 1,
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 11,
+                        height: MediaQuery.of(context).size.height / 10,
                         width: MediaQuery.of(context).size.width / 2,
                         child: Align(
-                          alignment: Alignment.center,
+                          alignment: Alignment.centerRight,
                           child: Text(
                             thread.votes.toString() + " Votes!",
                             style: TextStyle(
@@ -223,45 +230,48 @@ class _usersThread extends State<usersThread> {
                       flex: 1,
                       child: Container(
                         height: MediaQuery.of(context).size.height / 13,
-                        width: MediaQuery.of(context).size.width / 3.5,
-                        child: ToggleButtons(
-                          children: [
-                            Icon(Icons.plus_one),
-                            Icon(Icons.exposure_minus_1),
-                          ],
-                          isSelected: isSelected,
-                          onPressed: (int index) {
-                            setState(() {
-                              if (isSelected[index] == true) {
-                                isSelected[0] = false;
-                                isSelected[1] = false;
-                              } else {
-                                isSelected[0] = false;
-                                isSelected[1] = false;
-                                isSelected[index] = true;
-                              }
-                              if (isSelected[0] == true) {
-                                thread.votes = initialVotes;
-                                thread.votes = thread.votes + 1;
-                              } else if (isSelected[1] == true) {
-                                thread.votes = initialVotes;
-                                thread.votes = thread.votes - 1;
-                              } else {
-                                thread.votes = initialVotes;
-                              }
-                            });
-                          },
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: ToggleButtons(
+                            borderRadius: BorderRadius.circular(8.0),
+                            children: <Widget>[
+                              Container(width: (MediaQuery.of(context).size.width)/6.5, child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[new Icon(Icons.plus_one),new SizedBox(width: 4.0,)],)),
+                              Container(width: (MediaQuery.of(context).size.width)/6.5, child: new Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[new Icon(Icons.exposure_minus_1),new SizedBox(width: 4.0,)],)),
+                            ],
+                            selectedColor: Colors.white,
+                            fillColor: Colors.blue,
+                            isSelected: isSelected,
+                            onPressed: (int index) {
+                              setState(() {
+                                if (isSelected[index] == true) {
+                                  isSelected[0] = false;
+                                  isSelected[1] = false;
+                                } else {
+                                  isSelected[0] = false;
+                                  isSelected[1] = false;
+                                  isSelected[index] = true;
+                                }
+                                if (isSelected[0] == true) {
+                                  thread.votes = initialVotes;
+                                  thread.votes = thread.votes + 1;
+                                } else if (isSelected[1] == true) {
+                                  thread.votes = initialVotes;
+                                  thread.votes = thread.votes - 1;
+                                } else {
+                                  thread.votes = initialVotes;
+                                }
+                              });
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 20,
                     ),
                   ],
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height / 300,
-                  color: Colors.blueGrey,
+                  color: Colors.grey,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -336,7 +346,7 @@ class DeleteWidget extends StatelessWidget {
         TextButton(
           style: ElevatedButton.styleFrom(
             primary: Colors.white, // background
-            onPrimary: Colors.red, // foreground
+            onPrimary: Colors.red[400], // foreground
           ),
           child: Text("Delete"),
           onPressed: () {
